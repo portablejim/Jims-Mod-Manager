@@ -1,0 +1,49 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://libraries.minecraft.net/"
+    }
+    maven {
+        url "http://files.minecraftforge.net/maven/"
+    }
+}
+
+group 'portablejim.jimsmodmanager'
+//noinspection GroovyUnusedAssignment
+archivesBaseName = 'JimsModManager'
+//noinspection GroovyUnusedAssignment
+version = '0.1'
+
+dependencies {
+    compile 'com.google.guava:guava:16.0'
+    compile 'commons-io:commons-io:2.4'
+    compile 'net.minecraft:launchwrapper:1.11'
+    compile 'net.sf.jopt-simple:jopt-simple:4.5'
+    compile 'org.json:json:20141113'
+    compile 'org.apache.maven:maven-project:2.2.1'
+    compile 'org.eclipse.jgit:org.eclipse.jgit:3.6.2.201501210735-r'
+    testCompile 'junit:junit:4.11'
+}
+
+jar {
+    manifest {
+        attributes("TweakClass": "portablejim.jimsmodmanager.ModManager")
+    }
+}
+
+idea {
+    project {
+        vcs = 'Git'
+    }
+}
+
+//noinspection GroovyAssignabilityCheck
+run {
+    main = 'net.minecraft.launchwrapper.Launch'
+    workingDir = "run/"
+    args = ["--tweakClass", "portablejim.jimsmodmanager.ModManager", "--gameDir", "run"]
+}
