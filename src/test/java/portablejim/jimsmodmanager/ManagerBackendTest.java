@@ -1,5 +1,8 @@
 package portablejim.jimsmodmanager;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -44,6 +47,28 @@ public class ManagerBackendTest {
 
             ManagerBackend backend = new ManagerBackend();
             Assert.assertFalse(backend.hasValidModpack(testMinecraftDir.getRoot()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getModpackJsonWorks() {
+        String json1 = "{ 'Name': 'testpack1' }";
+        String json2 = "{ 'Name': 'testpack2' }";
+        JsonParser parser = new JsonParser();
+        try {
+            TemporaryFolder testModpackDir = new TemporaryFolder();
+            testModpackDir.create();
+            File testModpackFile = testModpackDir.newFile("modpack.json");
+            FileUtils.writeStringToFile(testModpackFile, json1);
+            ManagerBackend backend = new ManagerBackend();
+            JsonElement output1 = backend.getModpackJson(testModpackFile);
+            Assert.assertEquals(output1, parser.parse(json1));
+            FileUtils.writeStringToFile(testModpackFile, json2);
+            JsonElement output2 = backend.getModpackJson(testModpackFile);
+            Assert.assertEquals(output2, parser.parse(json2));
+
         } catch (IOException e) {
             e.printStackTrace();
         }

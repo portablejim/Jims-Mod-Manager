@@ -19,11 +19,11 @@ archivesBaseName = 'JimsModManager'
 version = '0.1'
 
 dependencies {
+    compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.google.guava:guava:16.0'
     compile 'commons-io:commons-io:2.4'
     compile 'net.minecraft:launchwrapper:1.11'
     compile 'net.sf.jopt-simple:jopt-simple:4.5'
-    compile 'org.json:json:20141113'
     compile 'org.apache.maven:maven-project:2.2.1'
     compile 'org.eclipse.jgit:org.eclipse.jgit:3.6.2.201501210735-r'
     testCompile 'junit:junit:4.11'
