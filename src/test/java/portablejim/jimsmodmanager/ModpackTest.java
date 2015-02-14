@@ -3,6 +3,7 @@ package portablejim.jimsmodmanager;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import groovy.json.JsonException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -63,6 +64,10 @@ public class ModpackTest {
                 Assert.fail();
             }
             catch (NullPointerException e) {
+                e.printStackTrace();
+                Assert.fail();
+            }
+            catch (JsonException e) {
                 Assert.assertTrue(true);
             }
         }
