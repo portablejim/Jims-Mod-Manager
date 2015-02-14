@@ -17,47 +17,47 @@
     "mods": [
         {
             "name": "Test mod 1",
-            "id", "testmod1",
+            "id": "testmod1",
             "version": "1",
-            "file": "testmod-%%VERSION%%.jar"
+            "file": "testmod-%%VERSION%%.jar",
             "type": "direct",
-            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar"
+            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar",
             "sha1": "0000"
-        }
+        },
         {
             "name": "Test mod 2",
-            "id", "testmod2",
+            "id": "testmod2",
             "version": "1",
-            "file": "testmod-%%VERSION%%.jar"
+            "file": "testmod-%%VERSION%%.jar",
             "type": "direct",
-            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar"
+            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar",
             "sha1": "0000"
-        }
+        },
         {
             "name": "Test mod 3",
-            "id", "testmod3",
+            "id": "testmod3",
             "version": "1",
-            "file": "testmod-%%VERSION%%.jar"
+            "file": "testmod-%%VERSION%%.jar",
             "type": "direct",
-            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar"
+            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar",
             "sha1": "0000"
-        }
+        },
         {
             "name": "Test mod 4",
-            "id", "testmod4",
+            "id": "testmod4",
             "version": "1",
-            "file": "testmod-%%VERSION%%.jar"
+            "file": "testmod-%%VERSION%%.jar",
             "type": "direct",
-            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar"
+            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar",
             "sha1": "0000"
-        }
+        },
         {
             "name": "Test mod 5",
-            "id", "testmod5",
+            "id": "testmod5",
             "version": "1",
-            "file": "testmod-%%VERSION%%.jar"
+            "file": "testmod-%%VERSION%%.jar",
             "type": "direct",
-            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar"
+            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar",
             "sha1": "0000"
         }
     ]
