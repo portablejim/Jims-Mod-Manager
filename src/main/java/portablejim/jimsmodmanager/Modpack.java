@@ -17,17 +17,34 @@ public class Modpack {
     public Modpack(JsonElement modpackJson) {
         JsonObject configJson;
         JsonObject modpackJsonObject = modpackJson.getAsJsonObject();
+
+        if(modpackJsonObject.get("name").isJsonNull()) {
+            throw new NullPointerException();
+        }
+
         name = modpackJsonObject.get("name").getAsString();
 
         config = new HashMap<>();
-        String[] configTypes = { "common", "client", "server" };
-        for(String type : configTypes) {
+
+        if(modpackJsonObject.get("config").isJsonNull()) {
+            throw new NullPointerException();
+        }
+
+        String[] configTypes = {"common", "client", "server"};
+        for (String type : configTypes) {
             configJson = modpackJsonObject.getAsJsonObject("config").getAsJsonObject(type);
+            if(configJson == null || configJson.isJsonNull()) {
+                continue;
+            }
             String configType = configJson.get("source").getAsString();
             switch (configType) {
                 case "folder":
                     config.put(type, new ConfigFolder(configJson));
             }
+        }
+
+        if(modpackJsonObject.get("mods").isJsonNull()) {
+            throw new NullPointerException();
         }
     }
 

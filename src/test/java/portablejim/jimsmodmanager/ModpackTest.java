@@ -11,6 +11,8 @@ import portablejim.jimsmodmanager.config.ConfigFolder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Test the functions on a Modpack definition.
@@ -34,9 +36,63 @@ public class ModpackTest {
     }
 
     @Test
-    public void testNewModpackWorks() {
-        Modpack m = new Modpack(modpackJson1);
-        Assert.assertNotNull(m);
+    public void testNewModpackWorksRandom() {
+        JsonParser parser = new JsonParser();
+        for(String name : testRandomText()) {
+            String jsonText = String.format("{ 'name': '%s', 'config': {}, 'mods': [] }", name);
+            JsonElement json = parser.parse(jsonText);
+            Modpack m = new Modpack(json);
+            Assert.assertNotNull(m);
+        }
+    }
+
+    @Test
+    public void testInvalidJsonCausesException() {
+        JsonParser parser = new JsonParser();
+        ArrayList<String> jsonText = new ArrayList<>();
+        jsonText.add("{ 'name': '%s', 'config': {} }");
+        jsonText.add("{ 'name': '%s', 'mods': [] }");
+        jsonText.add("{ 'name': '%s' }");
+        jsonText.add("{ 'config': {} }");
+        jsonText.add("{ 'mods': [] }");
+        jsonText.add("{ }");
+        for(String jsonString : jsonText) {
+            try {
+                JsonElement json = parser.parse(jsonString);
+                new Modpack(json);
+                Assert.fail();
+            }
+            catch (NullPointerException e) {
+                Assert.assertTrue(true);
+            }
+        }
+    }
+
+    @Test
+    public void testModpackNameWorksRandom() {
+        JsonParser parser = new JsonParser();
+        for(String name : testRandomText()) {
+            String jsonText = String.format("{ 'name': '%s', 'config': {}, 'mods': [] }", name);
+            JsonElement json = parser.parse(jsonText);
+            Modpack m = new Modpack(json);
+            Assert.assertNotNull(m);
+        }
+    }
+
+    private ArrayList<String> testRandomText() {
+        ArrayList<String> output = new ArrayList<>();
+        output.add("");
+        Random r = new Random();
+        for (int i = 0; i < 100; i++) {
+            int l = r.nextInt(50);
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < l; j++) {
+                sb.append(r.nextInt(26) + 'a');
+            }
+            output.add(sb.toString());
+
+        }
+        return output;
     }
 
     @Test
