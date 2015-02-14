@@ -15,30 +15,34 @@ import java.io.IOException;
  * Test the functions on a Modpack definition.
  */
 public class ModpackTest {
-    static JsonElement modpackJson;
+    static JsonElement modpackJson1;
+    static JsonElement modpackJson2;
 
     @BeforeClass
     public static void setUp() {
         try {
-            String s = FileUtils.readFileToString(new File("examples/modpack-example1.json"));
+            String s1 = FileUtils.readFileToString(new File("examples/modpack-example1.json"));
+            String s2 = FileUtils.readFileToString(new File("examples/modpack-example2.json"));
             JsonParser p = new JsonParser();
-            modpackJson = p.parse(s);
+            modpackJson1 = p.parse(s1);
+            modpackJson2 = p.parse(s2);
         } catch (IOException e) {
             e.printStackTrace();
-            modpackJson = new JsonObject();
+            modpackJson1 = new JsonObject();
         }
     }
 
     @Test
     public void testNewModpackWorks() {
-        Modpack m = new Modpack(modpackJson);
+        Modpack m = new Modpack(modpackJson1);
         Assert.assertNotNull(m);
     }
 
     @Test
     public void testModPackGetName() {
-        Modpack m = new Modpack(modpackJson);
-        String name = m.getName();
-        Assert.assertEquals("Test Pack 1", name);
+        Modpack m1 = new Modpack(modpackJson1);
+        Assert.assertEquals("Test Pack 1", m1.getName());
+        Modpack m2 = new Modpack(modpackJson2);
+        Assert.assertEquals("Test Pack 2", m2.getName());
     }
 }

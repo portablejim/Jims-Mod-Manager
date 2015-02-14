@@ -1,0 +1,64 @@
+{
+    "name": "Test Pack 2",
+    "config": {
+        "common": {
+            "source": "folder",
+            "url": "config/"
+        },
+        "client": {
+            "source": "folder",
+            "url": "config-client/"
+        },
+        "server": {
+            "source": "folder",
+            "url": "config-server/"
+        }
+    },
+    "mods": [
+        {
+            "name": "Test mod 1",
+            "id": "testmod1",
+            "version": "1",
+            "file": "testmod-%%VERSION%%.jar",
+            "type": "direct",
+            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar",
+            "sha1": "0000"
+        },
+        {
+            "name": "Test mod 2",
+            "id": "testmod2",
+            "version": "1",
+            "file": "testmod-%%VERSION%%.jar",
+            "type": "direct",
+            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar",
+            "sha1": "0000"
+        },
+        {
+            "name": "Test mod 3",
+            "id": "testmod3",
+            "version": "1",
+            "file": "testmod-%%VERSION%%.jar",
+            "type": "direct",
+            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar",
+            "sha1": "0000"
+        },
+        {
+            "name": "Test mod 4",
+            "id": "testmod4",
+            "version": "1",
+            "file": "testmod-%%VERSION%%.jar",
+            "type": "direct",
+            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar",
+            "sha1": "0000"
+        },
+        {
+            "name": "Test mod 5",
+            "id": "testmod5",
+            "version": "1",
+            "file": "testmod-%%VERSION%%.jar",
+            "type": "direct",
+            "url": "http://example.com/testmod/testmod-%%VERSION%%.jar",
+            "sha1": "0000"
+        }
+    ]
+}
