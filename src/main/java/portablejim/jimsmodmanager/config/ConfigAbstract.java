@@ -3,5 +3,6 @@ package portablejim.jimsmodmanager.config;
 /**
  * Common class across config types.
  */
-public class ConfigAbstract {
+public abstract class ConfigAbstract {
+    public abstract String getSourceUrl();
 }
