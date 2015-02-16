@@ -54,4 +54,14 @@ public class Modpack {
         if(config.containsKey("common")) return config.get("common");
         else return null;
     }
+
+    public ConfigAbstract getConfigClient() {
+        if(config.containsKey("client")) return config.get("client");
+        else return null;
+    }
+
+    public ConfigAbstract getConfigServer() {
+        if(config.containsKey("server")) return config.get("server");
+        else return null;
+    }
 }

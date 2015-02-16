@@ -108,4 +108,22 @@ public class ModpackTest {
         Modpack m1 = new Modpack(modpackJson);
         Assert.assertTrue(m1.getConfigCommon() instanceof ConfigFolder);
     }
+
+    @Test
+    public void testGetConfigClientWorks() {
+        JsonParser parser = new JsonParser();
+        String jsonText = "{ 'name': '%s', 'config': { 'client': { 'source': 'folder', 'url': 'config/' } }, 'mods': [] }";
+        JsonElement modpackJson = parser.parse(jsonText);
+        Modpack m1 = new Modpack(modpackJson);
+        Assert.assertTrue(m1.getConfigClient() instanceof ConfigFolder);
+    }
+
+    @Test
+    public void testGetConfigServerWorks() {
+        JsonParser parser = new JsonParser();
+        String jsonText = "{ 'name': '%s', 'config': { 'server': { 'source': 'folder', 'url': 'config/' } }, 'mods': [] }";
+        JsonElement modpackJson = parser.parse(jsonText);
+        Modpack m1 = new Modpack(modpackJson);
+        Assert.assertTrue(m1.getConfigServer() instanceof ConfigFolder);
+    }
 }
