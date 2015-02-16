@@ -56,7 +56,7 @@ public class ConfigFolderTest {
         Assert.assertNotNull(config);
     }
 
-    /*@Test
+    @Test
     public void getSourceUrlWorksAZ() {
         JsonParser p = new JsonParser();
         for(String name : testRandomText()) {
@@ -65,7 +65,7 @@ public class ConfigFolderTest {
             String url = config.getSourceUrl();
             Assert.assertEquals(name, url);
         }
-    }*/
+    }
 
     private ArrayList<String> testRandomText() {
         ArrayList<String> output = new ArrayList<>();
