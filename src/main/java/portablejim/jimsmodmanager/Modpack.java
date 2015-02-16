@@ -6,6 +6,7 @@ import groovy.json.JsonException;
 import portablejim.jimsmodmanager.config.ConfigAbstract;
 import portablejim.jimsmodmanager.config.ConfigFolder;
 
+import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -16,6 +17,10 @@ public class Modpack {
     private HashMap<String,ConfigAbstract> config;
 
     public Modpack(JsonElement modpackJson) {
+        this(modpackJson, new File("."));
+    }
+
+    public Modpack(JsonElement modpackJson, File mcDir) {
         JsonObject configJson;
         JsonObject modpackJsonObject = modpackJson.getAsJsonObject();
 
