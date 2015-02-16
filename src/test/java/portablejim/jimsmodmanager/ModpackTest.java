@@ -80,7 +80,7 @@ public class ModpackTest {
             String jsonText = String.format("{ 'name': '%s', 'config': {}, 'mods': [] }", name);
             JsonElement json = parser.parse(jsonText);
             Modpack m = new Modpack(json);
-            Assert.assertNotNull(m);
+            Assert.assertEquals(name, m.getName());
         }
     }
 
