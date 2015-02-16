@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import portablejim.jimsmodmanager.config.ConfigFolder;
 
 import java.io.File;
@@ -21,6 +22,7 @@ import java.util.Random;
 public class ModpackTest {
     static JsonElement modpackJson1;
     static JsonElement modpackJson2;
+    static File mcDir;
 
     @BeforeClass
     public static void setUp() {
@@ -30,6 +32,9 @@ public class ModpackTest {
             JsonParser p = new JsonParser();
             modpackJson1 = p.parse(s1);
             modpackJson2 = p.parse(s2);
+            TemporaryFolder f = new TemporaryFolder();
+            f.create();
+            mcDir = f.getRoot();
         } catch (IOException e) {
             e.printStackTrace();
             modpackJson1 = new JsonObject();
@@ -42,7 +47,7 @@ public class ModpackTest {
         for(String name : testRandomText()) {
             String jsonText = String.format("{ 'name': '%s', 'config': {}, 'mods': [] }", name);
             JsonElement json = parser.parse(jsonText);
-            Modpack m = new Modpack(json);
+            Modpack m = new Modpack(json, mcDir);
             Assert.assertNotNull(m);
         }
     }
@@ -60,7 +65,7 @@ public class ModpackTest {
         for(String jsonString : jsonText) {
             try {
                 JsonElement json = parser.parse(jsonString);
-                new Modpack(json);
+                new Modpack(json, mcDir);
                 Assert.fail();
             }
             catch (NullPointerException e) {
@@ -79,7 +84,7 @@ public class ModpackTest {
         for(String name : testRandomText()) {
             String jsonText = String.format("{ 'name': '%s', 'config': {}, 'mods': [] }", name);
             JsonElement json = parser.parse(jsonText);
-            Modpack m = new Modpack(json);
+            Modpack m = new Modpack(json, mcDir);
             Assert.assertEquals(name, m.getName());
         }
     }
@@ -105,7 +110,7 @@ public class ModpackTest {
         JsonParser parser = new JsonParser();
         String jsonText = "{ 'name': '%s', 'config': { 'common': { 'source': 'folder', 'url': 'config/' } }, 'mods': [] }";
         JsonElement modpackJson = parser.parse(jsonText);
-        Modpack m1 = new Modpack(modpackJson);
+        Modpack m1 = new Modpack(modpackJson, mcDir);
         Assert.assertTrue(m1.getConfigCommon() instanceof ConfigFolder);
     }
 
@@ -114,7 +119,7 @@ public class ModpackTest {
         JsonParser parser = new JsonParser();
         String jsonText = "{ 'name': '%s', 'config': { 'client': { 'source': 'folder', 'url': 'config/' } }, 'mods': [] }";
         JsonElement modpackJson = parser.parse(jsonText);
-        Modpack m1 = new Modpack(modpackJson);
+        Modpack m1 = new Modpack(modpackJson, mcDir);
         Assert.assertTrue(m1.getConfigClient() instanceof ConfigFolder);
     }
 
@@ -123,7 +128,7 @@ public class ModpackTest {
         JsonParser parser = new JsonParser();
         String jsonText = "{ 'name': '%s', 'config': { 'server': { 'source': 'folder', 'url': 'config/' } }, 'mods': [] }";
         JsonElement modpackJson = parser.parse(jsonText);
-        Modpack m1 = new Modpack(modpackJson);
+        Modpack m1 = new Modpack(modpackJson, mcDir);
         Assert.assertTrue(m1.getConfigServer() instanceof ConfigFolder);
     }
 }
