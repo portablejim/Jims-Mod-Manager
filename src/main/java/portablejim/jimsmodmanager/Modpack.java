@@ -2,7 +2,7 @@ package portablejim.jimsmodmanager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import groovy.json.JsonException;
+import com.google.gson.JsonSyntaxException;
 import portablejim.jimsmodmanager.config.ConfigAbstract;
 import portablejim.jimsmodmanager.config.ConfigFolder;
 
@@ -19,9 +19,9 @@ public class Modpack {
         JsonObject configJson;
         JsonObject modpackJsonObject = modpackJson.getAsJsonObject();
 
-        if(modpackJsonObject.get("name") == null) throw new JsonException("No (or invalid) name field.");
-        if(modpackJsonObject.get("config") == null) throw new JsonException("No (or invalid) config fields.");
-        if(modpackJsonObject.get("mods") == null) throw new JsonException("No (or invalid) mod list.");
+        if(modpackJsonObject.get("name") == null) throw new JsonSyntaxException("No (or invalid) name field.");
+        if(modpackJsonObject.get("config") == null) throw new JsonSyntaxException("No (or invalid) config fields.");
+        if(modpackJsonObject.get("mods") == null) throw new JsonSyntaxException("No (or invalid) mod list.");
 
 
         name = modpackJsonObject.get("name").getAsString();
@@ -42,7 +42,7 @@ public class Modpack {
         }
 
         if(modpackJsonObject.get("mods") == null) {
-            throw new JsonException("No (or invalid) mod list.");
+            throw new JsonSyntaxException("No (or invalid) mod list.");
         }
     }
 
