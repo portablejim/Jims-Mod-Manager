@@ -8,6 +8,7 @@ import net.minecraft.launchwrapper.LogWrapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import portablejim.jimsmodmanager.configaction.ConfigActionAbstract;
+import portablejim.jimsmodmanager.view.ILauncherFrontend;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,11 +17,18 @@ import java.io.IOException;
  * Main backend for the manager.
  */
 public class ManagerBackend {
-    public ManagerBackend() {
-        this(null, null);
-    }
-    public ManagerBackend(Model model, File minecraftDir) {
+    private final Model model;
+    private final ILauncherFrontend frontend;
+    private final File minecraftDir;
 
+    public ManagerBackend() {
+        this(null, null, null);
+    }
+    public ManagerBackend(Model model, ILauncherFrontend frontend, File minecraftDir) {
+
+        this.model = model;
+        this.frontend = frontend;
+        this.minecraftDir = minecraftDir;
     }
 
     public boolean hasValidModpack(File minecraftDir) {
