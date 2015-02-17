@@ -8,7 +8,7 @@ import java.io.File;
  * Base class for actions performed on a config.
  */
 public abstract class ConfigActionAbstract {
-    private ConfigAbstract config;
+    protected ConfigAbstract config;
     File configDir;
 
     public ConfigActionAbstract(ConfigAbstract config, File configDir) {
