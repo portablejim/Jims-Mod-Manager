@@ -6,6 +6,8 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import portablejim.jimsmodmanager.config.ConfigAbstract;
+import portablejim.jimsmodmanager.configaction.ConfigActionAbstract;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -72,5 +74,92 @@ public class ManagerBackendTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static int i = 0;
+    class ConfigTest extends ConfigAbstract {
+        public int called = 0;
+
+        @Override
+        public String getSourceUrl() {
+            called++;
+            return "config/";
+        }
+    }
+
+    class ConfigActionTest extends ConfigActionAbstract {
+        public int copyToCalled = 0;
+
+        public ConfigActionTest(File configDir) {
+            super(new ConfigTest(), configDir);
+        }
+
+        @Override
+        public void copyTo(File location) {
+            copyToCalled = i;
+            i++;
+        }
+    }
+
+    @Test
+    public void mergeConfigWorksWithBoth() {
+        TemporaryFolder f = new TemporaryFolder();
+        File modpackDir = null;
+        File outputDir = null;
+        try {
+            f.create();
+            modpackDir = f.getRoot();
+            outputDir = f.newFolder();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        i = 0;
+        ConfigActionTest configAction1 = new ConfigActionTest(modpackDir);
+        ConfigActionTest configAction2 = new ConfigActionTest(modpackDir);
+        ManagerBackend backend = new ManagerBackend();
+        backend.mergeConfigs(outputDir, configAction1, configAction2);
+        Assert.assertEquals(0, configAction1.copyToCalled);
+        Assert.assertEquals(1, configAction2.copyToCalled);
+
+    }
+
+    @Test
+    public void mergeConfigWorksWithSideOnly() {
+        TemporaryFolder f = new TemporaryFolder();
+        File modpackDir = null;
+        File outputDir = null;
+        try {
+            f.create();
+            modpackDir = f.getRoot();
+            outputDir = f.newFolder();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        i = 0;
+        ConfigActionTest configAction2 = new ConfigActionTest(modpackDir);
+        ManagerBackend backend = new ManagerBackend();
+        backend.mergeConfigs(outputDir, null, configAction2);
+        Assert.assertEquals(0, configAction2.copyToCalled);
+
+    }
+
+    @Test
+    public void mergeConfigWorksWithCommonOnly() {
+        TemporaryFolder f = new TemporaryFolder();
+        File modpackDir = null;
+        File outputDir = null;
+        try {
+            f.create();
+            modpackDir = f.getRoot();
+            outputDir = f.newFolder();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        i = 0;
+        ConfigActionTest configAction1 = new ConfigActionTest(modpackDir);
+        ManagerBackend backend = new ManagerBackend();
+        backend.mergeConfigs(outputDir, configAction1, null);
+        Assert.assertEquals(0, configAction1.copyToCalled);
+
     }
 }

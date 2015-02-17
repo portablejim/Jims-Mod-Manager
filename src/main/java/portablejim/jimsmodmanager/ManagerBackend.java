@@ -7,6 +7,7 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.launchwrapper.LogWrapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import portablejim.jimsmodmanager.configaction.ConfigActionAbstract;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,5 +46,14 @@ public class ManagerBackend {
             e.printStackTrace();
         }
         return new JsonObject();
+    }
+
+    public void mergeConfigs(File outputDir, ConfigActionAbstract configActionCommon, ConfigActionAbstract configActionSide) {
+        if(configActionCommon != null) {
+            configActionCommon.copyTo(outputDir);
+        }
+        if(configActionSide != null) {
+            configActionSide.copyTo(outputDir);
+        }
     }
 }
