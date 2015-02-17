@@ -16,6 +16,13 @@ import java.io.IOException;
  * Main backend for the manager.
  */
 public class ManagerBackend {
+    public ManagerBackend() {
+        this(null, null);
+    }
+    public ManagerBackend(Model model, File minecraftDir) {
+
+    }
+
     public boolean hasValidModpack(File minecraftDir) {
         File modpackDir = new File(minecraftDir, "jmm-modpack");
         File modpackFile = new File(modpackDir, "modpack.json");
