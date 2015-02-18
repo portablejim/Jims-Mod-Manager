@@ -10,6 +10,7 @@ import org.apache.commons.io.IOUtils;
 import portablejim.jimsmodmanager.configaction.ConfigActionAbstract;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -38,6 +39,9 @@ public class ManagerBackend {
             Modpack modpack = new Modpack(packJson);
             processModpack(modpack);
         }
+        else {
+            model.setModpack_json_progress(0);
+        }
     }
 
     public void processModpack(Modpack modpack) {
@@ -50,7 +54,11 @@ public class ManagerBackend {
         try {
             String modpackString = IOUtils.toString(modpackFile.toURI());
             parser.parse(modpackString);
+        } catch (FileNotFoundException e) {
+            LogWrapper.warning("Modpack does not exist (%s)", modpackFile.getPath());
+            return false;
         } catch (IOException e) {
+            LogWrapper.warning("Other type of IO error. Trying to parse modpack json file at %s", modpackFile.getPath());
             e.printStackTrace();
             return false;
         } catch (JsonSyntaxException e) {
