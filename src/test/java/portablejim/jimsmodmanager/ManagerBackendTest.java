@@ -1,24 +1,19 @@
 package portablejim.jimsmodmanager;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.FileUtils;
-import org.jmock.Expectations;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
 import portablejim.jimsmodmanager.config.ConfigAbstract;
 import portablejim.jimsmodmanager.configaction.ConfigActionAbstract;
-import portablejim.jimsmodmanager.view.ILauncherFrontend;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Tests for the backend.
@@ -26,12 +21,9 @@ import java.io.IOException;
 public class ManagerBackendTest {
     @Rule
     public TemporaryFolder testMinecraftDir = new TemporaryFolder();
-    @Rule
-    public final JUnitRuleMockery context = new JUnitRuleMockery();
 
     @Test
-    public void getLocalModpackRunsGetModPackJsonIfValid() {
-        final ManagerBackend testManager = context.mock(ManagerBackend.class, "getModPackJson");
+    public void getLocalModpackRunsProcessModpackIfValid() {
         Model model = new Model();
         File testModPackDir = new File(testMinecraftDir.getRoot(), "jmm-modpack");
         testModPackDir.mkdir();
@@ -42,14 +34,18 @@ public class ManagerBackendTest {
             e.printStackTrace();
         }
 
-        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot());
-
-
-        context.checking(new Expectations() {{
-            oneOf (testManager).getModpackJson(testModPackFile);
-        }});
+        File calledFile = null;
+        AtomicBoolean called = new AtomicBoolean();
+        called.set(false);
+        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
+            public void processModpack(Modpack modpack) {
+                called.set(true);
+            }
+        };
 
         backend.getLocalModpack("jmm-modpack", "modpack.json");
+
+        Assert.assertTrue("processModpack() not called.", called.get());
     }
 
     @Test

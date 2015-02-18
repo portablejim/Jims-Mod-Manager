@@ -34,6 +34,18 @@ public class ManagerBackend {
     private ConfigActionAbstract configActionSide;
 
     public void getLocalModpack(String modpackDir, String modpackFilename) {
+        File modpackDirFile = new File(minecraftDir, modpackDir);
+        File modpackFile = new File(modpackDirFile, modpackFilename);
+
+        if(hasValidModpack(modpackFile)) {
+            JsonElement packJson = getModpackJson(modpackFile);
+            Modpack modpack = new Modpack(packJson);
+            processModpack(modpack);
+        }
+    }
+
+    public void processModpack(Modpack modpack) {
+
     }
 
     public boolean hasValidModpack(File minecraftDir) {
