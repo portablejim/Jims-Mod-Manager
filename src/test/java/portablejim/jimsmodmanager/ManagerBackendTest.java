@@ -59,7 +59,7 @@ public class ManagerBackendTest {
         fw.close();
 
         ManagerBackend backend = new ManagerBackend();
-        Assert.assertTrue(backend.hasValidModpack(testMinecraftDir.getRoot()));
+        Assert.assertTrue(backend.hasValidModpack(testJsonFile));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ManagerBackendTest {
         fw.close();
 
         ManagerBackend backend = new ManagerBackend();
-        Assert.assertFalse(backend.hasValidModpack(testMinecraftDir.getRoot()));
+        Assert.assertFalse(backend.hasValidModpack(testJsonFile));
     }
 
     @Test
