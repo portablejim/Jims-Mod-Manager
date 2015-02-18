@@ -49,61 +49,49 @@ public class ManagerBackendTest {
     }
 
     @Test
-    public void hadValidModpackReturnsTrueWhenValidJSON() {
-        try {
-            TemporaryFolder testMinecraftDir = new TemporaryFolder();
-            testMinecraftDir.create();
-            File testModpackDir = testMinecraftDir.newFolder("jmm-modpack");
-            File testJsonFile = new File(testModpackDir, "modpack.json");
-            FileWriter fw = new FileWriter(testJsonFile);
-            fw.write("{ 'Name': 'testpack' }");
-            fw.close();
+    public void hadValidModpackReturnsTrueWhenValidJSON() throws IOException {
+        TemporaryFolder testMinecraftDir = new TemporaryFolder();
+        testMinecraftDir.create();
+        File testModpackDir = testMinecraftDir.newFolder("jmm-modpack");
+        File testJsonFile = new File(testModpackDir, "modpack.json");
+        FileWriter fw = new FileWriter(testJsonFile);
+        fw.write("{ 'Name': 'testpack' }");
+        fw.close();
 
-            ManagerBackend backend = new ManagerBackend();
-            Assert.assertTrue(backend.hasValidModpack(testMinecraftDir.getRoot()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ManagerBackend backend = new ManagerBackend();
+        Assert.assertTrue(backend.hasValidModpack(testMinecraftDir.getRoot()));
     }
 
     @Test
-    public void hadValidModpackReturnsFalseWhenInvalidJSON() {
-        try {
-            TemporaryFolder testMinecraftDir = new TemporaryFolder();
-            testMinecraftDir.create();
-            File testModpackDir = testMinecraftDir.newFolder("jmm-modpack");
-            File testJsonFile = new File(testModpackDir, "modpack.json");
-            FileWriter fw = new FileWriter(testJsonFile);
-            fw.write("[ 'Name': 'testpack' }");
-            fw.close();
+    public void hadValidModpackReturnsFalseWhenInvalidJSON() throws IOException {
+        TemporaryFolder testMinecraftDir = new TemporaryFolder();
+        testMinecraftDir.create();
+        File testModpackDir = testMinecraftDir.newFolder("jmm-modpack");
+        File testJsonFile = new File(testModpackDir, "modpack.json");
+        FileWriter fw = new FileWriter(testJsonFile);
+        fw.write("[ 'Name': 'testpack' }");
+        fw.close();
 
-            ManagerBackend backend = new ManagerBackend();
-            Assert.assertFalse(backend.hasValidModpack(testMinecraftDir.getRoot()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ManagerBackend backend = new ManagerBackend();
+        Assert.assertFalse(backend.hasValidModpack(testMinecraftDir.getRoot()));
     }
 
     @Test
-    public void getModpackJsonWorks() {
+    public void getModpackJsonWorks() throws IOException {
         String json1 = "{ 'Name': 'testpack1' }";
         String json2 = "{ 'Name': 'testpack2' }";
         JsonParser parser = new JsonParser();
-        try {
-            TemporaryFolder testModpackDir = new TemporaryFolder();
-            testModpackDir.create();
-            File testModpackFile = testModpackDir.newFile("modpack.json");
-            FileUtils.writeStringToFile(testModpackFile, json1);
-            ManagerBackend backend = new ManagerBackend();
-            JsonElement output1 = backend.getModpackJson(testModpackFile);
-            Assert.assertEquals(output1, parser.parse(json1));
-            FileUtils.writeStringToFile(testModpackFile, json2);
-            JsonElement output2 = backend.getModpackJson(testModpackFile);
-            Assert.assertEquals(output2, parser.parse(json2));
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        TemporaryFolder testModpackDir = new TemporaryFolder();
+        testModpackDir.create();
+        File testModpackFile = testModpackDir.newFile("modpack.json");
+        FileUtils.writeStringToFile(testModpackFile, json1);
+        ManagerBackend backend = new ManagerBackend();
+        JsonElement output1 = backend.getModpackJson(testModpackFile);
+        Assert.assertEquals(output1, parser.parse(json1));
+        FileUtils.writeStringToFile(testModpackFile, json2);
+        JsonElement output2 = backend.getModpackJson(testModpackFile);
+        Assert.assertEquals(output2, parser.parse(json2));
     }
 
     public static int i = 0;
