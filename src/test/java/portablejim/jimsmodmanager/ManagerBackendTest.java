@@ -1,6 +1,7 @@
 package portablejim.jimsmodmanager;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import portablejim.jimsmodmanager.config.ConfigAbstract;
 import portablejim.jimsmodmanager.configaction.ConfigActionAbstract;
+import portablejim.jimsmodmanager.view.ILauncherFrontend;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -17,6 +19,33 @@ import java.io.IOException;
  * Tests for the backend.
  */
 public class ManagerBackendTest {
+
+    @Test
+    public void getLocalModpackSkipsDownloadingWhenPresent() throws IOException {
+        class TestManagerBackend extends ManagerBackend {
+            public TestManagerBackend(Model model, ILauncherFrontend o, File testMinecraftDir) {
+                super(model,o,testMinecraftDir);
+            }
+
+            @Override
+            public boolean hasValidModpack(File minecraftDir) {
+                return true;
+            }
+
+            @Override
+            public JsonElement getModpackJson(File modpackFile) {
+                JsonParser p = new JsonParser();
+                return p.parse("{ 'name': '%s', 'config': {}, 'mods': [] }");
+            }
+        }
+        TemporaryFolder testMinecraftDir = new TemporaryFolder();
+        testMinecraftDir.create();
+        Model model = new Model();
+        TestManagerBackend backend = new TestManagerBackend(model, null, testMinecraftDir.getRoot());
+        JsonObject json = backend.getLocalModpack(model, testMinecraftDir.getRoot());
+        Assert.assertEquals(backend.getModpackJson(testMinecraftDir.getRoot()), json);
+        Assert.assertEquals(Model.STATE.PROCESS_MODPACK, model.getStage());
+    }
 
     @Test
     public void hadValidModpackReturnsTrueWhenValidJSON() {
