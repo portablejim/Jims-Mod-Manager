@@ -73,21 +73,15 @@ public class ManagerBackendTest {
     }
 
     @Test
-    public void getLocalModpackDoesNotRunsProcessModpackIfInvalid() {
+    public void getLocalModpackDoesNotRunsProcessModpackIfHasValidModpackIsFalse() {
         Model model = new Model();
-        File testModPackDir = new File(testMinecraftDir.getRoot(), "jmm-modpack");
-        //noinspection ResultOfMethodCallIgnored
-        testModPackDir.mkdir();
-        File testModPackFile = new File(testModPackDir, "modpack.json");
-        try {
-            FileUtils.writeStringToFile(testModPackFile, "{ 'name': 'Test Pack', 'config': {}, 'mods': [] ");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         AtomicBoolean called = new AtomicBoolean();
         called.set(false);
         ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
+            public boolean hasValidModpack(File modpackFile) {
+                return false;
+            }
             public void processModpack(Modpack modpack) {
                 called.set(true);
             }
@@ -99,60 +93,12 @@ public class ManagerBackendTest {
     }
 
     @Test
-    public void getLocalModpackDoesNotRunsProcessModpackIfMissing() {
+    public void getLocalModpackSetsModelIfHasValidModpackIsFalse() {
         Model model = new Model();
-        File testModPackDir = new File(testMinecraftDir.getRoot(), "jmm-modpack");
-        //noinspection ResultOfMethodCallIgnored
-        testModPackDir.mkdir();
-
-        AtomicBoolean called = new AtomicBoolean();
-        called.set(false);
-        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
-            public void processModpack(Modpack modpack) {
-                called.set(true);
-            }
-        };
-
-        backend.getLocalModpack("jmm-modpack", "modpack.json");
-
-        Assert.assertFalse("processModpack() is called.", called.get());
-    }
-
-    @Test
-    public void getLocalModpackSetsModelIfInvalid() {
-        Model model = new Model();
-        File testModPackDir = new File(testMinecraftDir.getRoot(), "jmm-modpack");
-        //noinspection ResultOfMethodCallIgnored
-        testModPackDir.mkdir();
-        File testModPackFile = new File(testModPackDir, "modpack.json");
-        try {
-            FileUtils.writeStringToFile(testModPackFile, "{ 'name': 'Test Pack', 'config': {}, 'mods': []");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
-            public void processModpack(Modpack modpack) {
-            }
-        };
-
-        model.setModpack_json_progress(-1);
-
-        backend.getLocalModpack("jmm-modpack", "modpack.json");
-        int modPackPercent = model.getModpack_json_progress();
-
-        Assert.assertEquals(0, modPackPercent);
-    }
-
-    @Test
-    public void getLocalModpackSetsModelIfMissing() {
-        Model model = new Model();
-        File testModPackDir = new File(testMinecraftDir.getRoot(), "jmm-modpack");
-        //noinspection ResultOfMethodCallIgnored
-        testModPackDir.mkdir();
-
-        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
-            public void processModpack(Modpack modpack) {
+            public boolean hasValidModpack(File modpackFile) {
+                return false;
             }
         };
 
