@@ -28,11 +28,6 @@ public class ManagerBackend {
         this.minecraftDir = minecraftDir;
     }
 
-    private JsonObject packJson;
-    private Modpack modpack;
-    private ConfigActionAbstract configActionCommon;
-    private ConfigActionAbstract configActionSide;
-
     public void getLocalModpack(String modpackDir, String modpackFilename) {
         File modpackDirFile = new File(minecraftDir, modpackDir);
         File modpackFile = new File(modpackDirFile, modpackFilename);
@@ -51,10 +46,9 @@ public class ManagerBackend {
     public boolean hasValidModpack(File modpackFile) {
         JsonParser parser = new JsonParser();
 
-        JsonElement modpack = null;
         try {
             String modpackString = IOUtils.toString(modpackFile.toURI());
-            modpack = parser.parse(modpackString);
+            parser.parse(modpackString);
         } catch (IOException e) {
             e.printStackTrace();
             return false;

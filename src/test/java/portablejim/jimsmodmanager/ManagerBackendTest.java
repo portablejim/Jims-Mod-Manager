@@ -26,6 +26,7 @@ public class ManagerBackendTest {
     public void getLocalModpackRunsProcessModpackIfValid() {
         Model model = new Model();
         File testModPackDir = new File(testMinecraftDir.getRoot(), "jmm-modpack");
+        //noinspection ResultOfMethodCallIgnored
         testModPackDir.mkdir();
         File testModPackFile = new File(testModPackDir, "modpack.json");
         try {
@@ -34,7 +35,6 @@ public class ManagerBackendTest {
             e.printStackTrace();
         }
 
-        File calledFile = null;
         AtomicBoolean called = new AtomicBoolean();
         called.set(false);
         ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
