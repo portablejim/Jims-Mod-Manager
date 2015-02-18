@@ -7,6 +7,7 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.launchwrapper.LogWrapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import portablejim.jimsmodmanager.config.ConfigAbstract;
 import portablejim.jimsmodmanager.configaction.ConfigActionAbstract;
 
 import java.io.File;
@@ -45,8 +46,21 @@ public class ManagerBackend {
     }
 
     public void processModpack(Modpack modpack) {
-
+        // Get correct configs
     }
+
+    public void processConfigs(ConfigAbstract configCommon, ConfigAbstract configSide) {
+        // Configs => ConfigActions
+        // Set config folder in this class (don't pass it in)
+        // mergeconfigs()
+
+        // Future problem: If one config fails to download. Will just null do?
+    }
+
+    public void processModlist() {
+        // Still to do mod class creation
+    }
+
 
     public boolean hasValidModpack(File modpackFile) {
         JsonParser parser = new JsonParser();
