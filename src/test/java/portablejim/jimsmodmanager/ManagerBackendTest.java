@@ -24,7 +24,7 @@ public class ManagerBackendTest {
     public void getLocalModpackSkipsDownloadingWhenPresent() throws IOException {
         class TestManagerBackend extends ManagerBackend {
             public TestManagerBackend(Model model, ILauncherFrontend o, File testMinecraftDir) {
-                super(model,o,testMinecraftDir);
+                super(model, testMinecraftDir);
             }
 
             @Override
@@ -44,7 +44,6 @@ public class ManagerBackendTest {
         TestManagerBackend backend = new TestManagerBackend(model, null, testMinecraftDir.getRoot());
         JsonObject json = backend.getLocalModpack(model, testMinecraftDir.getRoot());
         Assert.assertEquals(backend.getModpackJson(testMinecraftDir.getRoot()), json);
-        Assert.assertEquals(Model.STATE.PROCESS_MODPACK, model.getStage());
     }
 
     @Test

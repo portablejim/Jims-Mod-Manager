@@ -16,8 +16,6 @@ public class ModManager implements ITweaker {
         LogWrapper.info("ModManager: acceptOptions()");
         Model model = new Model();
         model.setSide(Model.SIDE.CLIENT);
-        ManagerBackend backend = new ManagerBackend(model, null, gameDir);
-        backend.process();
     }
 
     @Override

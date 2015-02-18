@@ -6,17 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * Data model. Stores state.
  */
 public class Model {
-    public static enum STATE {
-        START,
-        DOWNLOADING_MODPACK,
-        PROCESS_MODPACK,
-        DOWNLOADING_CONFIG_COMMON,
-        DOWNLOADING_CONFIG_SIDE,
-        PROCESSING_CONFIGS,
-        DOWNLOADING_MODS,
-        PROCESSING_MODS,
-        LAUNCHING
-    }
     public static enum SIDE {
         COMMON,
         CLIENT,
@@ -32,7 +21,6 @@ public class Model {
         public boolean enabled;
     }
 
-    private STATE stage;
     private int error;
     private int modpack_json_progress;
     private int config_common_progress;
@@ -41,21 +29,12 @@ public class Model {
     private ConcurrentHashMap<String, ModState> mods;
 
     public Model() {
-        stage = STATE.START;
         error = 0;
         modpack_json_progress = 0;
         config_common_progress = 0;
         config_sided_progress = 0;
         side = SIDE.COMMON;
         mods = new ConcurrentHashMap<>();
-    }
-
-    public STATE getStage() {
-        return stage;
-    }
-
-    public void setStage(STATE stage) {
-        this.stage = stage;
     }
 
     public int getError() {
