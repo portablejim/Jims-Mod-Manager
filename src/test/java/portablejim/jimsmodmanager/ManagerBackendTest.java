@@ -49,6 +49,30 @@ public class ManagerBackendTest {
     }
 
     @Test
+    public void getLocalModpackSetsModelIfValid() {
+        Model model = new Model();
+        File testModPackDir = new File(testMinecraftDir.getRoot(), "jmm-modpack");
+        //noinspection ResultOfMethodCallIgnored
+        testModPackDir.mkdir();
+        File testModPackFile = new File(testModPackDir, "modpack.json");
+        try {
+            FileUtils.writeStringToFile(testModPackFile, "{ 'name': 'Test Pack', 'config': {}, 'mods': [] }");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
+            public void processModpack(Modpack modpack) {
+            }
+        };
+
+        backend.getLocalModpack("jmm-modpack", "modpack.json");
+        int modPackPercent = model.getModpack_json_progress();
+
+        Assert.assertEquals(100, modPackPercent);
+    }
+
+    @Test
     public void hadValidModpackReturnsTrueWhenValidJSON() throws IOException {
         TemporaryFolder testMinecraftDir = new TemporaryFolder();
         testMinecraftDir.create();

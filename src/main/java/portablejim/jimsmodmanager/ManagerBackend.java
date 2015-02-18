@@ -34,6 +34,7 @@ public class ManagerBackend {
 
         if(hasValidModpack(modpackFile)) {
             JsonElement packJson = getModpackJson(modpackFile);
+            model.setModpack_json_progress(100);
             Modpack modpack = new Modpack(packJson);
             processModpack(modpack);
         }
