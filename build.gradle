@@ -26,6 +26,7 @@ dependencies {
     compile 'net.sf.jopt-simple:jopt-simple:4.5'
     compile 'org.apache.maven:maven-project:2.2.1'
     compile 'org.eclipse.jgit:org.eclipse.jgit:3.6.2.201501210735-r'
+    testCompile 'org.jmock:jmock-junit4:2.6.0'
     testCompile 'junit:junit:4.11'
 }
 
