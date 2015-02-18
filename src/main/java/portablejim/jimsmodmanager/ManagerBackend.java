@@ -33,13 +33,7 @@ public class ManagerBackend {
     private ConfigActionAbstract configActionCommon;
     private ConfigActionAbstract configActionSide;
 
-    public JsonObject getLocalModpack(Model model, File minecraftDir) {
-        if(hasValidModpack(minecraftDir)) {
-            File modpackDir = new File(minecraftDir, "jmm-modpack");
-            File modpackFile = new File(modpackDir, "modpack.json");
-            return getModpackJson(modpackFile).getAsJsonObject();
-        }
-        return null;
+    public void getLocalModpack(String modpackDir, String modpackFilename) {
     }
 
     public boolean hasValidModpack(File minecraftDir) {

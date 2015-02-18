@@ -21,32 +21,6 @@ import java.io.IOException;
 public class ManagerBackendTest {
 
     @Test
-    public void getLocalModpackSkipsDownloadingWhenPresent() throws IOException {
-        class TestManagerBackend extends ManagerBackend {
-            public TestManagerBackend(Model model, ILauncherFrontend o, File testMinecraftDir) {
-                super(model, testMinecraftDir);
-            }
-
-            @Override
-            public boolean hasValidModpack(File minecraftDir) {
-                return true;
-            }
-
-            @Override
-            public JsonElement getModpackJson(File modpackFile) {
-                JsonParser p = new JsonParser();
-                return p.parse("{ 'name': '%s', 'config': {}, 'mods': [] }");
-            }
-        }
-        TemporaryFolder testMinecraftDir = new TemporaryFolder();
-        testMinecraftDir.create();
-        Model model = new Model();
-        TestManagerBackend backend = new TestManagerBackend(model, null, testMinecraftDir.getRoot());
-        JsonObject json = backend.getLocalModpack(model, testMinecraftDir.getRoot());
-        Assert.assertEquals(backend.getModpackJson(testMinecraftDir.getRoot()), json);
-    }
-
-    @Test
     public void hadValidModpackReturnsTrueWhenValidJSON() {
         try {
             TemporaryFolder testMinecraftDir = new TemporaryFolder();
