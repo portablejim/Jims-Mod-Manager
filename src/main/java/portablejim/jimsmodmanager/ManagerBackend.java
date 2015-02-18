@@ -48,9 +48,7 @@ public class ManagerBackend {
 
     }
 
-    public boolean hasValidModpack(File minecraftDir) {
-        File modpackDir = new File(minecraftDir, "jmm-modpack");
-        File modpackFile = new File(modpackDir, "modpack.json");
+    public boolean hasValidModpack(File modpackFile) {
         JsonParser parser = new JsonParser();
 
         JsonElement modpack = null;
