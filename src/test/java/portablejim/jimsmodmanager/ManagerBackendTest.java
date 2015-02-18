@@ -4,9 +4,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.FileUtils;
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
 import portablejim.jimsmodmanager.config.ConfigAbstract;
 import portablejim.jimsmodmanager.configaction.ConfigActionAbstract;
 import portablejim.jimsmodmanager.view.ILauncherFrontend;
@@ -19,6 +24,33 @@ import java.io.IOException;
  * Tests for the backend.
  */
 public class ManagerBackendTest {
+    @Rule
+    public TemporaryFolder testMinecraftDir = new TemporaryFolder();
+    @Rule
+    public final JUnitRuleMockery context = new JUnitRuleMockery();
+
+    @Test
+    public void getLocalModpackRunsGetModPackJsonIfValid() {
+        final ManagerBackend testManager = context.mock(ManagerBackend.class, "getModPackJson");
+        Model model = new Model();
+        File testModPackDir = new File(testMinecraftDir.getRoot(), "jmm-modpack");
+        testModPackDir.mkdir();
+        File testModPackFile = new File(testModPackDir, "modpack.json");
+        try {
+            FileUtils.writeStringToFile(testModPackFile, "{ 'name': 'Test Pack', 'config': {}, 'mods': [] }");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot());
+
+
+        context.checking(new Expectations() {{
+            oneOf (testManager).getModpackJson(testModPackFile);
+        }});
+
+        backend.getLocalModpack("jmm-modpack", "modpack.json");
+    }
 
     @Test
     public void hadValidModpackReturnsTrueWhenValidJSON() {
