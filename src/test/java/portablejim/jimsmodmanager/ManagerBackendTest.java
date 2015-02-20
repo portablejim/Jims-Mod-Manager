@@ -265,6 +265,51 @@ public class ManagerBackendTest {
         Assert.assertEquals("configServer was not using the common config", modpack.getConfigServer(), passedAbstractSide);
     }
 
+    ConfigActionAbstract passedActionAbstractCommon;
+    ConfigActionAbstract passedActionAbstractSide;
+    @Test
+    public void processConfigsCallsMergeConfigsWithNullIfNullSupplied() throws IOException {
+        Model model = new Model();
+
+        passedActionAbstractCommon = new ConfigActionTest(testMinecraftDir.newFolder());
+        passedActionAbstractSide = new ConfigActionTest(testMinecraftDir.newFolder());
+
+        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
+            public void mergeConfigs(File outputDir, ConfigActionAbstract configActionCommon, ConfigActionAbstract configActionSide) {
+                passedActionAbstractCommon = configActionCommon;
+                passedActionAbstractSide = configActionSide;
+            }
+        };
+
+        backend.processConfigs(null, null);
+
+        Assert.assertNull("ActionAbstractCommon is not null", passedActionAbstractCommon);
+        Assert.assertNull("ActionAbstractSide is not null", passedActionAbstractSide);
+    }
+
+    @Test
+    public void processConfigsCallsMergeConfigsWithNullIfClassNotConverted() throws IOException {
+        Model model = new Model();
+
+        passedActionAbstractCommon = new ConfigActionTest(testMinecraftDir.newFolder());
+        passedActionAbstractSide = new ConfigActionTest(testMinecraftDir.newFolder());
+
+        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
+            public void mergeConfigs(File outputDir, ConfigActionAbstract configActionCommon, ConfigActionAbstract configActionSide) {
+                passedActionAbstractCommon = configActionCommon;
+                passedActionAbstractSide = configActionSide;
+            }
+        };
+
+        ConfigAbstract testConfigCommon = new ConfigTest();
+        ConfigAbstract testConfigClient = new ConfigTest();
+
+        backend.processConfigs(testConfigCommon, testConfigClient);
+
+        Assert.assertNull("ActionAbstractCommon is not null", passedActionAbstractCommon);
+        Assert.assertNull("ActionAbstractSide is not null", passedActionAbstractSide);
+    }
+
     @Test
     public void hadValidModpackReturnsTrueWhenValidJSON() throws IOException {
         TemporaryFolder testMinecraftDir = new TemporaryFolder();

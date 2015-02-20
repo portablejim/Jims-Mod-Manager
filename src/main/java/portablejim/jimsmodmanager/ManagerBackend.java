@@ -8,7 +8,9 @@ import net.minecraft.launchwrapper.LogWrapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import portablejim.jimsmodmanager.config.ConfigAbstract;
+import portablejim.jimsmodmanager.config.ConfigFolder;
 import portablejim.jimsmodmanager.configaction.ConfigActionAbstract;
+import portablejim.jimsmodmanager.configaction.ConfigActionFolder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,8 +63,21 @@ public class ManagerBackend {
         // Configs => ConfigActions
         // Set config folder in this class (don't pass it in)
         // mergeconfigs()
+        File targetFolder = new File(minecraftDir, "config");
+
+        ConfigActionAbstract actionCommon = getConfigAction(targetFolder, configCommon);
+        ConfigActionAbstract actionSide = getConfigAction(targetFolder, configSide);
+
+        mergeConfigs(targetFolder, actionCommon, actionSide);
 
         // Future problem: If one config fails to download. Will just null do?
+    }
+
+    private ConfigActionAbstract getConfigAction(File targetFolder, ConfigAbstract configAbstract) {
+        if(configAbstract instanceof ConfigFolder) {
+            return new ConfigActionFolder((ConfigFolder)configAbstract, targetFolder);
+        }
+        else return null;
     }
 
     public void processModlist() {
