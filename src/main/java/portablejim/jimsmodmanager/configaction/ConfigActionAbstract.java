@@ -16,5 +16,9 @@ public abstract class ConfigActionAbstract {
         this.configDir = configDir;
     }
 
+    public ConfigAbstract getConfig() {
+        return config;
+    }
+
     public abstract void copyTo(File location);
 }

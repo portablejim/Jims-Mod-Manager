@@ -1,6 +1,7 @@
 package portablejim.jimsmodmanager;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -108,6 +109,160 @@ public class ManagerBackendTest {
         int modPackPercent = model.getModpack_json_progress();
 
         Assert.assertEquals(0, modPackPercent);
+    }
+
+    ConfigAbstract passedAbstractCommon;
+    ConfigAbstract passedAbstractSide;
+    @Test
+    public void processModpackRunsProcessConfigWithNullIfNoPackSpecificed() throws IOException {
+        Model model = new Model();
+
+        passedAbstractCommon = new ConfigTest();
+        passedAbstractSide = new ConfigTest();
+
+        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
+            public void processConfigs(ConfigAbstract configCommon, ConfigAbstract configSide) {
+                passedAbstractCommon = configCommon;
+                passedAbstractSide = configSide;
+            }
+        };
+
+        JsonParser p = new JsonParser();
+        JsonObject json = p.parse("{ 'name': 'Testpack', 'config': {}, 'mods': [] }").getAsJsonObject();
+
+        Modpack modpack = new Modpack(json);
+        backend.processModpack(modpack);
+
+        Assert.assertNull("Abstract common was not null", passedAbstractCommon);
+        Assert.assertNull("Abstract side was not null", passedAbstractSide);
+
+        model.setSide(Model.SIDE.CLIENT);
+
+        modpack = new Modpack(json);
+        backend.processModpack(modpack);
+
+        Assert.assertNull("Abstract common was not null", passedAbstractCommon);
+        Assert.assertNull("Abstract side was not null", passedAbstractSide);
+
+        model.setSide(Model.SIDE.SERVER);
+
+        modpack = new Modpack(json);
+        backend.processModpack(modpack);
+
+        Assert.assertNull("Abstract common was not null", passedAbstractCommon);
+        Assert.assertNull("Abstract side was not null", passedAbstractSide);
+    }
+
+    @Test
+    public void processModpackPassesCommonSideBothSpecified() throws IOException {
+        Model model = new Model();
+
+        passedAbstractCommon = new ConfigTest();
+        passedAbstractSide = new ConfigTest();
+
+        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
+            public void processConfigs(ConfigAbstract configCommon, ConfigAbstract configSide) {
+                passedAbstractCommon = configCommon;
+                passedAbstractSide = configSide;
+            }
+        };
+
+        JsonParser p = new JsonParser();
+        JsonElement json = p.parse("{ 'name': 'Testpack', " +
+                "'config': { " +
+                "'common': { 'source': 'folder', 'url': 'config/' }, " +
+                "'client': { 'source': 'folder', 'url': 'config-client/' }, " +
+                "'server': { 'source': 'folder', 'url': 'config-server/' } " +
+                "}, 'mods': [] }");
+        Modpack modpack = new Modpack(json);
+
+        backend.processModpack(modpack);
+
+        Assert.assertNotNull("configCommon common was null", passedAbstractCommon);
+        Assert.assertEquals("configCommon was not using the common config", modpack.getConfigCommon(), passedAbstractCommon);
+    }
+
+    @Test
+    public void processModpackPassesCommonNullSideSidesSpecified() throws IOException {
+        Model model = new Model();
+
+        passedAbstractCommon = new ConfigTest();
+        passedAbstractSide = new ConfigTest();
+
+        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
+            public void processConfigs(ConfigAbstract configCommon, ConfigAbstract configSide) {
+                passedAbstractCommon = configCommon;
+                passedAbstractSide = configSide;
+            }
+        };
+
+        JsonParser p = new JsonParser();
+        JsonElement json = p.parse("{ 'name': 'Testpack', " +
+                "'config': { " +
+                "'client': { 'source': 'folder', 'url': 'config-client/' }, " +
+                "'server': { 'source': 'folder', 'url': 'config-server/' } " +
+                "}, 'mods': [] }");
+        Modpack modpack = new Modpack(json);
+
+        backend.processModpack(modpack);
+
+        Assert.assertNull("Abstract common was not null", passedAbstractCommon);
+    }
+
+    @Test
+    public void processModpackPassesClientSideClient() throws IOException {
+        Model model = new Model();
+
+        passedAbstractCommon = new ConfigTest();
+        passedAbstractSide = new ConfigTest();
+
+        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
+            public void processConfigs(ConfigAbstract configCommon, ConfigAbstract configSide) {
+                passedAbstractCommon = configCommon;
+                passedAbstractSide = configSide;
+            }
+        };
+
+        model.setSide(Model.SIDE.CLIENT);
+
+        JsonParser p = new JsonParser();
+        JsonElement json = p.parse("{ 'name': 'Testpack', " +
+                "'config': { 'client': { 'source': 'folder', 'url': 'config-client/' } }, " +
+                "'mods': [] }");
+        Modpack modpack = new Modpack(json);
+
+        backend.processModpack(modpack);
+
+        Assert.assertNotNull("configClient common was null", passedAbstractSide);
+        Assert.assertEquals("configClient was not using the common config", modpack.getConfigClient(), passedAbstractSide);
+    }
+
+    @Test
+    public void processModpackPassesClientSideServer() throws IOException {
+        Model model = new Model();
+
+        passedAbstractCommon = new ConfigTest();
+        passedAbstractSide = new ConfigTest();
+
+        ManagerBackend backend = new ManagerBackend(model, testMinecraftDir.getRoot()) {
+            public void processConfigs(ConfigAbstract configCommon, ConfigAbstract configSide) {
+                passedAbstractCommon = configCommon;
+                passedAbstractSide = configSide;
+            }
+        };
+
+        model.setSide(Model.SIDE.SERVER);
+
+        JsonParser p = new JsonParser();
+        JsonElement json = p.parse("{ 'name': 'Testpack', " +
+                "'config': { 'server': { 'source': 'folder', 'url': 'config-server/' } }, " +
+                "'mods': [] }");
+        Modpack modpack = new Modpack(json);
+
+        backend.processModpack(modpack);
+
+        Assert.assertNotNull("configServer common was null", passedAbstractSide);
+        Assert.assertEquals("configServer was not using the common config", modpack.getConfigServer(), passedAbstractSide);
     }
 
     @Test

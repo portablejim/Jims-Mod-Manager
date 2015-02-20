@@ -47,6 +47,14 @@ public class ManagerBackend {
 
     public void processModpack(Modpack modpack) {
         // Get correct configs
+        ConfigAbstract side = null;
+        if(model.getSide() == Model.SIDE.CLIENT) {
+            side = modpack.getConfigClient();
+        }
+        else if(model.getSide() == Model.SIDE.SERVER) {
+            side = modpack.getConfigServer();
+        }
+        processConfigs(modpack.getConfigCommon(), side);
     }
 
     public void processConfigs(ConfigAbstract configCommon, ConfigAbstract configSide) {
